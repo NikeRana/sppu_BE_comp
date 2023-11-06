@@ -1,0 +1,33 @@
+def job_sequencing(jobs):
+    jobs.sort(key=lambda x: x[2], reverse=True)
+    max_deadline = max(jobs, key=lambda x: x[1])[1]
+    time_slots = [-1] * (max_deadline + 1)
+    total_profit = 0
+    scheduled_jobs = 0
+    scheduled_job_ids = []
+
+    for job in jobs:
+        job_id, deadline, profit = job[0], job[1], job[2]
+        for i in range(deadline, 0, -1):
+            if time_slots[i] == -1:
+                time_slots[i] = job_id
+                total_profit += profit
+                scheduled_jobs += 1
+                scheduled_job_ids.append(job_id)
+                break
+
+    return total_profit, scheduled_job_ids
+
+
+jobs = []
+n = int(input("Enter the number of jobs: "))
+for i in range(n):
+    job_id = input(f"Enter the job ID for job {i+1}: ")
+    deadline = int(input(f"Enter the deadline for job {i+1}: "))
+    profit = int(input(f"Enter the profit for job {i+1}: "))
+    jobs.append((job_id, deadline, profit))
+
+max_profit, scheduled_job_ids = job_sequencing(jobs)
+
+print(f"Maximum Profit: {max_profit}")
+print(f"Scheduled Jobs: {scheduled_job_ids}")
